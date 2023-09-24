@@ -21,7 +21,41 @@ TreeNode n10 = { 7, &n6, &n9, 0};
 TreeNode n11 = { 1, &n5, &n10, 0 };
 TreeNode* exp = &n11;
 
-TreeNode* parent(TreeNode* child) {};
+char* getNodeName(TreeNode* node) {
+	// 각 노드에 대한 이름을 반환하는 함수
+	if (node == &n1) return "n1";
+	if (node == &n2) return "n2";
+	if (node == &n3) return "n3";
+	if (node == &n4) return "n4";
+	if (node == &n5) return "n5";
+	if (node == &n6) return "n6";
+	if (node == &n7) return "n7";
+	if (node == &n8) return "n8";
+	if (node == &n9) return "n9";
+	if (node == &n10) return "n10";
+	if (node == &n11) return "n11";
+	return "Unknown";
+}
+
+TreeNode* parent(TreeNode* child, TreeNode* root) {
+	// 기저 사례: 루트 노드가 NULL이거나 자식 노드와 일치할 때
+	if (root == NULL) {
+		return -1; // 또는 다른 적절한 값으로 부모가 없음을 나타냄
+	}
+
+	if (root->left == child || root->right == child) {
+		return root;
+	}
+
+	// 왼쪽 서브트리와 오른쪽 서브트리에서 찾지 못한 경우 재귀 호출
+	int leftParent = parent(child, root->left);
+	if (leftParent != -1) {
+		return root;
+	}
+
+	int rightParent = parent(child, root->right);
+	return root;
+}
 
 TreeNode* find_successor(TreeNode* p) {
 	TreeNode* q = p->right;
@@ -54,5 +88,11 @@ int main(void) {
 
 	thread_inorder(exp);
 	printf("\n");
+
+	TreeNode* parentValue = parent(&n4, exp);
+	printf("n4 노드의 부모 노드 이름: %s\n", getNodeName(parentValue));
+	TreeNode* parentValue2 = parent(&n5, exp);
+	printf("n5 노드의 부모 노드 이름: %s\n", getNodeName(parentValue2));
+
 	return 0;
 }
